@@ -13,7 +13,7 @@ const DateTracker = {
       } else {
         const d = new Date();
         const pad = n => String(n).padStart(2, '0');
-        const ts = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+        const ts = `Date_${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}_${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
         window.dateState.timestamp = ts;
         sessionStorage.setItem('date_ts', ts);
       }
@@ -48,7 +48,7 @@ const DateTracker = {
     if (this.pendingSync) clearTimeout(this.pendingSync);
     this.pendingSync = setTimeout(() => {
       this.sync();
-    }, 400);
+    }, 300);
   },
 
   async sync() {
@@ -77,7 +77,7 @@ const DateTracker = {
       });
       const patchData = await patchRes.json();
       
-      // If no row was updated, insert it
+      // If no row was found to update, insert fresh row
       if (patchData && patchData.updated === 0) {
         await fetch(this.apiUrl, {
           method: 'POST',
@@ -94,7 +94,7 @@ const DateTracker = {
   async syncFinal(answer, noCount) {
     this.init();
     window.dateState.proposalAnswer = answer;
-    window.dateState.noClicksCount = noCount;
+    window.dateState.noClicksCount = String(noCount ?? 0);
     window.dateState.status = 'SHE SAID YES! 💍❤️';
 
     const payload = this.getPayload();
@@ -115,7 +115,7 @@ const DateTracker = {
       if (data && data.updated > 0) return;
     } catch (e) {}
 
-    // Fallback: If PATCH didn't update any row, POST the complete row
+    // Fallback: If PATCH didn't match, POST complete final row
     try {
       await fetch(this.apiUrl, {
         method: 'POST',
