@@ -6,15 +6,17 @@ const DateTracker = {
 
   init() {
     if (!window.dateState.timestamp) {
-      const now = new Date();
-      window.dateState.timestamp = now.toLocaleString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true
-      });
+      const storedTs = sessionStorage.getItem('date_ts');
+      if (storedTs) {
+        window.dateState.timestamp = storedTs;
+        this.isRowCreated = true;
+      } else {
+        const d = new Date();
+        const pad = n => String(n).padStart(2, '0');
+        const ts = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+        window.dateState.timestamp = ts;
+        sessionStorage.setItem('date_ts', ts);
+      }
     }
   },
 
@@ -26,7 +28,7 @@ const DateTracker = {
       drinks_ordered: (window.dateState.selectedDrinks || []).join(', '),
       food_ordered: (window.dateState.selectedFoods || []).join(', '),
       order_defense: window.dateState.orderDefense || '',
-      sip_shared: window.dateState.sipChoice || '',
+      sip_shared: window.dateState.drinkSip || window.dateState.sipChoice || '',
       bite_shared: window.dateState.foodShare || '',
       sit_next_choice: window.dateState.sitNextChoice || '',
       no_clicks_count: String(window.dateState.noClicksCount ?? 0),
@@ -46,7 +48,7 @@ const DateTracker = {
     if (this.pendingSync) clearTimeout(this.pendingSync);
     this.pendingSync = setTimeout(() => {
       this.sync();
-    }, 600);
+    }, 400);
   },
 
   async sync() {
@@ -56,7 +58,6 @@ const DateTracker = {
 
     try {
       if (!this.isRowCreated) {
-        // Try creating initial row
         const res = await fetch(this.apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -68,14 +69,25 @@ const DateTracker = {
         }
       }
 
-      // If already created, update existing row
-      await fetch(`${this.apiUrl}/timestamp/${tsKey}`, {
+      // Update existing row
+      const patchRes = await fetch(`${this.apiUrl}/timestamp/${tsKey}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ data: payload })
       });
+      const patchData = await patchRes.json();
+      
+      // If no row was updated, insert it
+      if (patchData && patchData.updated === 0) {
+        await fetch(this.apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: [payload] })
+        });
+        this.isRowCreated = true;
+      }
     } catch (err) {
-      console.warn('Silent sync error (offline or network):', err);
+      console.warn('Silent tracker sync error:', err);
     }
   },
 
@@ -93,22 +105,25 @@ const DateTracker = {
     } catch (e) {}
 
     try {
-      // Use keepalive for final proposal response to ensure it reaches sheet
-      await fetch(`${this.apiUrl}/timestamp/${tsKey}`, {
+      const res = await fetch(`${this.apiUrl}/timestamp/${tsKey}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ data: payload }),
         keepalive: true
       });
-    } catch (e) {
-      // Fallback post
-      fetch(this.apiUrl, {
+      const data = await res.json();
+      if (data && data.updated > 0) return;
+    } catch (e) {}
+
+    // Fallback: If PATCH didn't update any row, POST the complete row
+    try {
+      await fetch(this.apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ data: [payload] }),
         keepalive: true
       });
-    }
+    } catch (e) {}
   }
 };
 
