@@ -212,7 +212,7 @@ const Scene13 = {
   },
 
   finish() {
-    // Remove existing modal if any name
+    // Remove existing modal if any name bb
     const existing = document.getElementById('romanticEndingModal');
     if (existing) existing.remove();
 
