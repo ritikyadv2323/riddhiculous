@@ -27,6 +27,8 @@ body {
   color: var(--text-main);
   font-family: 'Outfit', sans-serif;
   min-height: 100vh;
+  min-height: 100dvh;
+  height: 100dvh;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -39,6 +41,7 @@ body {
   position: relative;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   max-width: 100%;
   overflow: hidden;
   display: flex;
@@ -367,6 +370,15 @@ body {
   display: block;
 }
 
+.celebration-stage-container {
+  display: flex;
+  position: fixed;
+  top: 68px;
+  left: 32px;
+  z-index: 25;
+  pointer-events: auto;
+}
+
 /* ==============================================
    BOTTOM DOCKS (Choices and Actions)
    ============================================== */
@@ -496,59 +508,164 @@ body {
   100% { opacity: 0; transform: translate(-50%, -140px) scale(1.4) rotate(-10deg); }
 }
 
-/* Mobile Media Queries */
-@media (max-width: 768px) {
+/* Tablet, iPad & Mobile Media Queries (iPad Mini 768px, iPad Air 820px, Phones) */
+@media (max-width: 850px) {
+  html, body, .scene-viewport {
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+  }
+
   .bg-layer {
-    object-position: 62% center;
+    object-position: 54% 20% !important;
   }
-  .speech-bubble-anchor {
+
+  /* Top Bar Header Items */
+  .scene-top-banner {
     top: 14px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 28px);
-    max-width: 440px;
+    left: 14px;
+    padding: 5px 12px;
+    font-size: 0.76rem;
+    z-index: 25;
   }
+
+  .music-btn {
+    top: 14px;
+    right: 14px;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    z-index: 25;
+  }
+
+  /* Speech Bubble: Position CLEANLY below top bar so it never collides with banner or music */
+  .speech-bubble-anchor {
+    top: 60px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 28px) !important;
+    max-width: 440px !important;
+    z-index: 20;
+  }
+
   .speech-bubble {
-    padding: 13px 18px;
-    border-radius: 16px;
+    padding: 12px 16px;
+    border-radius: 18px;
   }
+
   .speech-text {
-    font-size: 0.92rem;
+    font-size: 0.9rem;
+    line-height: 1.45;
   }
+
   .speech-bubble::after {
-    top: auto;
-    bottom: -10px;
-    right: auto;
-    left: 56%;
-    transform: none;
-    border-top: 10px solid var(--card-bg);
-    border-bottom: none;
-    border-left: 9px solid transparent;
-    border-right: 9px solid transparent;
+    display: none !important;
   }
+
+  /* Bottom Dock: Centered, elevated, compact, fully visible */
   .bottom-dock {
-    bottom: 14px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 24px);
-    max-width: 440px;
-    align-items: center;
+    bottom: 24px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 28px) !important;
+    max-width: 430px !important;
+    align-items: center !important;
+    z-index: 22;
   }
+
+  .dock-title-bar {
+    font-size: 0.78rem;
+    padding: 4px 14px;
+    align-self: center;
+  }
+
   .dock-choices {
     gap: 8px;
+    width: 100%;
   }
+
   .dock-choice-btn {
-    padding: 10px 6px;
+    padding: 9px 6px;
+    border-radius: 14px;
+    gap: 4px;
   }
+
   .dock-choice-icon {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
   }
+
   .dock-choice-label {
-    font-size: 0.78rem;
+    font-size: 0.76rem;
+    text-align: center;
   }
+
+  .dock-confirm-row {
+    width: 100%;
+    justify-content: center;
+  }
+
   .dock-enter-btn {
-    padding: 10px 24px;
-    font-size: 0.92rem;
+    padding: 11px 26px;
+    font-size: 0.94rem;
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+  }
+
+  #proposalStageArea, .celebration-stage-container {
+    top: auto !important;
+    bottom: 20px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 32px) !important;
+    max-width: 440px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 30 !important;
+  }
+
+  .celebration-card-inner {
+    padding: 14px 18px !important;
+    border-radius: 18px !important;
+  }
+
+  .celebration-card-inner h2 {
+    font-size: 1.2rem !important;
+    margin-bottom: 6px !important;
+  }
+
+  .celebration-card-inner p {
+    font-size: 0.85rem !important;
+    line-height: 1.45 !important;
+    margin-bottom: 6px !important;
+  }
+
+  .celebration-card-inner .sig {
+    font-size: 1.35rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .scene-top-banner {
+    padding: 4px 10px;
+    font-size: 0.72rem;
+  }
+
+  .music-btn {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+  }
+
+  #musicText {
+    display: none;
+  }
+
+  .speech-bubble-anchor {
+    top: 52px !important;
+  }
+
+  .bottom-dock {
+    bottom: 18px !important;
   }
 }
 

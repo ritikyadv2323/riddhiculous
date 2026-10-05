@@ -184,21 +184,25 @@ const Scene13 = {
     }
 
     if (stage) {
+      stage.className = 'celebration-stage-container';
       stage.style.display = 'flex';
-      stage.style.position = 'fixed';
-      stage.style.top = '68px';
-      stage.style.left = '24px';
-      stage.style.zIndex = '20';
+      stage.style.position = '';
+      stage.style.top = '';
+      stage.style.left = '';
+      stage.style.zIndex = '';
       stage.innerHTML = `
-        <div style="background:rgba(20,13,9,0.92); border:1.5px solid var(--accent-gold); padding:22px 26px; border-radius:22px; max-width:390px; box-shadow:0 14px 40px rgba(0,0,0,0.75), 0 0 32px rgba(255,207,113,0.3); animation:popIn 0.8s cubic-bezier(0.16,1,0.3,1) forwards; backdrop-filter:blur(8px);">
-          <h2 style="font-family:'Playfair Display',serif; font-size:1.45rem; color:#fff; margin-bottom:10px; line-height:1.35;">happy birthday my cutiepie, my forever ❤️</h2>
-          <p style="font-size:0.95rem; line-height:1.65; color:var(--text-muted); margin-bottom:12px;">
+        <div class="celebration-card-inner" id="celebrationCard" onclick="Scene13.toggleCard()" style="background:rgba(20,13,9,0.92); border:1.5px solid var(--accent-gold); padding:22px 26px; border-radius:22px; max-width:390px; width:100%; box-shadow:0 14px 40px rgba(0,0,0,0.75), 0 0 32px rgba(255,207,113,0.3); animation:popIn 0.8s cubic-bezier(0.16,1,0.3,1) forwards; backdrop-filter:blur(8px); cursor:pointer;">
+          <h2 style="font-family:'Playfair Display',serif; font-size:1.42rem; color:#fff; margin-bottom:8px; line-height:1.35;">happy birthday my cutiepie, my forever ❤️</h2>
+          <p class="celebration-body-text" style="font-size:0.92rem; line-height:1.6; color:var(--text-muted); margin-bottom:10px;">
             i hope this year gives you everything you've ever wished for.<br>
             more happiness. more peace. more reasons to smile.<br>
             and lots and lots of your favorite cold coffee with me. ☕️
           </p>
-          <div style="font-family:'Caveat',cursive; font-size:1.6rem; color:var(--accent-gold); text-align:right;">
+          <div class="sig" style="font-family:'Caveat',cursive; font-size:1.55rem; color:var(--accent-gold); text-align:right;">
             — your ritik
+          </div>
+          <div style="font-size:0.68rem; color:rgba(255,255,255,0.45); text-align:center; margin-top:6px; letter-spacing:1px; text-transform:uppercase;">
+            ✨ tap to toggle letter
           </div>
         </div>
       `;
@@ -275,6 +279,22 @@ const Scene13 = {
       window.loadScene(window.Scene1);
     } else {
       window.location.reload();
+    }
+  },
+
+  toggleCard() {
+    const card = document.getElementById('celebrationCard');
+    if (!card) return;
+    const body = card.querySelector('.celebration-body-text');
+    const sig = card.querySelector('.sig');
+    if (body) {
+      if (body.style.display === 'none') {
+        body.style.display = 'block';
+        if (sig) sig.style.display = 'block';
+      } else {
+        body.style.display = 'none';
+        if (sig) sig.style.display = 'none';
+      }
     }
   }
 };
