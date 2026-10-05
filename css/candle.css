@@ -1,0 +1,245 @@
+/* Interactive Birthday Candle Blow Styling */
+.candle-scene-wrapper {
+  position: relative;
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  width: 90%;
+  max-width: 440px;
+  animation: candleFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes candleFadeIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Ambient Dimming Overlay */
+.candle-ambient-dimmer {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 6, 4, 0.55);
+  pointer-events: none;
+  z-index: 8;
+  transition: opacity 1.2s ease;
+}
+
+.candle-card {
+  background: rgba(22, 14, 10, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid var(--card-border);
+  border-radius: 28px;
+  padding: 32px 24px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65),
+              0 0 35px rgba(255, 180, 80, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Candle Presentation */
+.candle-container {
+  position: relative;
+  width: 120px;
+  height: 140px;
+  margin: 0 auto 20px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+}
+
+/* The Cupcake / Cake Base */
+.cake-base {
+  width: 90px;
+  height: 38px;
+  background: linear-gradient(to bottom, #d4a373 0%, #a26b3e 100%);
+  border-radius: 6px 6px 16px 16px;
+  position: relative;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+}
+
+.cake-frosting {
+  position: absolute;
+  top: -12px;
+  left: -5px;
+  right: -5px;
+  height: 22px;
+  background: #fdf2e9;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Candle Stick */
+.candle-stick {
+  width: 12px;
+  height: 48px;
+  background: repeating-linear-gradient(
+    45deg,
+    #fff,
+    #fff 4px,
+    #f28e8e 4px,
+    #f28e8e 8px
+  );
+  border-radius: 3px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Candle Wick */
+.candle-wick {
+  width: 2px;
+  height: 8px;
+  background: #333;
+  margin: 0 auto;
+  position: relative;
+  top: -2px;
+}
+
+/* Living Flame */
+.candle-flame {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 32px;
+  background: radial-gradient(ellipse at 50% 80%, #fffc78 0%, #ff9800 60%, rgba(255, 60, 0, 0.8) 100%);
+  border-radius: 50% 50% 35% 35% / 60% 60% 40% 40%;
+  box-shadow: 0 0 20px #ff9800, 0 0 35px #ff5722;
+  animation: flameFlicker 1.5s ease-in-out infinite alternate;
+  transform-origin: 50% 90%;
+  transition: all 0.3s ease;
+}
+
+@keyframes flameFlicker {
+  0% { transform: translateX(-50%) rotate(-2deg) scale(1); }
+  25% { transform: translateX(-50%) rotate(2deg) scale(1.05); }
+  50% { transform: translateX(-50%) rotate(-1deg) scale(0.98); }
+  75% { transform: translateX(-50%) rotate(3deg) scale(1.03); }
+  100% { transform: translateX(-50%) rotate(-2deg) scale(1); }
+}
+
+/* Flame Leaning in Wind */
+.candle-flame.in-wind {
+  transform: translateX(-35%) rotate(35deg) scale(0.85);
+  box-shadow: 0 0 10px #ff9800;
+}
+
+/* Extinguished Flame */
+.candle-flame.blown-out {
+  opacity: 0;
+  transform: translateX(-50%) scale(0.2);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Wispy Smoke */
+.candle-smoke {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background: rgba(230, 230, 230, 0.7);
+  border-radius: 50%;
+  opacity: 0;
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+.candle-smoke.smoking {
+  animation: smokeRise 2.2s ease-out forwards;
+}
+
+@keyframes smokeRise {
+  0% { opacity: 0.8; transform: translate(-50%, 0) scale(1); }
+  50% { opacity: 0.5; transform: translate(-30%, -35px) scale(2.5); }
+  100% { opacity: 0; transform: translate(-60%, -75px) scale(4); }
+}
+
+/* Wind Gust Graphic Animation */
+.wind-gust {
+  position: absolute;
+  top: 30px;
+  left: -80px;
+  width: 140px;
+  height: 2px;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.8), transparent);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.wind-gust.blowing {
+  animation: gustBlow 0.5s ease-out forwards;
+}
+
+@keyframes gustBlow {
+  0% { opacity: 0; transform: translateX(-40px) scaleX(0.4); }
+  50% { opacity: 0.9; transform: translateX(80px) scaleX(1.2); }
+  100% { opacity: 0; transform: translateX(180px) scaleX(0.6); }
+}
+
+/* Sparkle Burst */
+.sparkle-burst {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  font-size: 1.4rem;
+  opacity: 0;
+}
+
+.sparkle-burst.active {
+  animation: sparklePop 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes sparklePop {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(0.4); }
+  50% { opacity: 1; transform: translate(-50%, -80px) scale(1.3); }
+  100% { opacity: 0; transform: translate(-50%, -130px) scale(1.6); }
+}
+
+/* Dialogue text */
+.candle-prompt-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.candle-sub-text {
+  font-size: 0.98rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 22px;
+}
+
+.candle-action-btn {
+  background: linear-gradient(135deg, #e8a868 0%, #d48039 100%);
+  color: #1a0f0a;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(212, 128, 57, 0.45);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.candle-action-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 10px 28px rgba(212, 128, 57, 0.65);
+}

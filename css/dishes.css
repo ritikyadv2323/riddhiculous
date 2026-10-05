@@ -1,0 +1,48 @@
+/* Tabletop Served Dishes (Scene 6) */
+.table-dishes-dock {
+  position: absolute;
+  bottom: 120px;
+  left: 36px;
+  z-index: 12;
+  max-width: 440px;
+}
+
+.dishes-platter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  background: rgba(24, 16, 11, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  padding: 10px 14px;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.table-dish-badge {
+  background: rgba(45, 28, 20, 0.9);
+  border: 1px solid rgba(245, 218, 176, 0.3);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  animation: dishPop 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes dishPop {
+  0% { opacity: 0; transform: scale(0.6) translateY(10px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .table-dishes-dock {
+    bottom: 128px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 28px);
+    max-width: 400px;
+  }
+}

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>One Little Birthday Café Date ☕</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,400&family=Caveat:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="scene-viewport">
+    <!-- Crossfading Café Background Layers -->
+    <img src="cafe_opening.jpg" alt="Cozy Birthday Café" class="bg-layer active" id="bg-scene-1">
+    <img src="walking_to_cafe.jpg" alt="Walking to the Café" class="bg-layer" id="bg-scene-2">
+    <img src="cafe_table.jpg" alt="Seated at the Table" class="bg-layer" id="bg-scene-3">
+    <img src="food_served.jpg" alt="Food Served at Table" class="bg-layer" id="bg-scene-6">
+    <img src="taking_selfie.jpg" alt="Taking Selfie Together" class="bg-layer" id="bg-scene-selfie">
+    <img src="cake_lit.jpg" alt="Birthday Cake Lit" class="bg-layer" id="bg-cake-1">
+    <img src="cake_blowing.jpg" alt="Blowing Birthday Candle" class="bg-layer" id="bg-cake-2">
+    <img src="cake_hearts.jpg" alt="Celebration Hearts Falling" class="bg-layer" id="bg-cake-3">
+    <img src="pink_lilies.jpg" alt="Pink Lilies Bouquet Gift" class="bg-layer" id="bg-lilies">
+    <img src="proposal_kneeling.jpg" alt="Proposing on One Knee" class="bg-layer" id="bg-proposal">
+    <img src="ring_on_finger.jpg" alt="Putting Ring on Finger" class="bg-layer" id="bg-ring">
+
+    <!-- Atmospheric Overlays & Ambient Particles -->
+    <div class="ambient-overlay"></div>
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Persistent Music Toggle (Plays seamlessly across all scenes) -->
+    <button class="music-btn" id="musicToggle" onclick="window.toggleMusic()" title="Toggle cozy café ambience">
+      <span class="music-icon">🎵</span>
+      <span id="musicText">play café music</span>
+    </button>
+
+    <!-- Dynamic Scene Mount -->
+    <div id="scene-mount"></div>
+  </div>
+
+  <!-- Core Modules -->
+  <script src="js/state.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/tracker.js"></script>
+
+  <!-- Scene Modules -->
+  <script src="scenes/scene1.js"></script>
+  <script src="scenes/scene2.js"></script>
+  <script src="scenes/scene3.js"></script>
+  <script src="scenes/scene4.js"></script>
+  <script src="scenes/scene5.js"></script>
+  <script src="scenes/scene6.js"></script>
+  <script src="scenes/scene7.js"></script>
+  <script src="scenes/scene8.js"></script>
+  <script src="scenes/scene8b.js"></script>
+  <script src="scenes/scene9.js"></script>
+  <script src="scenes/scene10.js"></script>
+  <script src="scenes/scene11.js"></script>
+  <script src="scenes/scene12.js"></script>
+  <script src="scenes/scene13.js"></script>
+
+  <script>
+    // Scene Switcher with Smooth Fades
+    window.loadScene = function(sceneObj) {
+      const mount = document.getElementById('scene-mount');
+      mount.style.opacity = '0';
+      mount.style.transition = 'opacity 0.4s ease';
+
+      setTimeout(() => {
+        mount.innerHTML = sceneObj.render();
+        mount.style.opacity = '1';
+        if (typeof sceneObj.init === 'function') {
+          sceneObj.init();
+        }
+      }, 400);
+    };
+
+    // Background Layer Switcher
+    window.switchBackground = function(bgId) {
+      document.querySelectorAll('.bg-layer').forEach(bg => bg.classList.remove('active'));
+      const activeBg = document.getElementById(bgId);
+      if (activeBg) activeBg.classList.add('active');
+    };
+
+    // Canvas Particles
+    const canvas = document.getElementById('particles-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height + 20;
+        this.radius = Math.random() * 2 + 0.8;
+        this.speedY = -(Math.random() * 0.35 + 0.1);
+        this.speedX = (Math.random() - 0.5) * 0.25;
+        this.alpha = Math.random() * 0.55 + 0.2;
+      }
+      update() {
+        this.y += this.speedY;
+        this.x += this.speedX;
+        if (this.y < -10 || this.x < -10 || this.x > canvas.width + 10) {
+          this.reset();
+          this.y = canvas.height + 10;
+        }
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 218, 140, ${Math.max(0.1, Math.min(this.alpha, 0.75))})`;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = 'rgba(255, 190, 90, 0.7)';
+        ctx.fill();
+      }
+    }
+    for (let i = 0; i < 35; i++) particles.push(new Particle());
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // Floating Hearts on Screen Tap
+    function createHeart(x, y) {
+      const heart = document.createElement('div');
+      heart.className = 'floating-heart';
+      const emojis = ['❤️', '☕', '✨', '🌸', '💫'];
+      heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      heart.style.left = `${x}px`;
+      heart.style.top = `${y}px`;
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 1200);
+    }
+
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('button')) return;
+      createHeart(e.clientX, e.clientY);
+    });
+
+    // Initial Launch
+    window.addEventListener('DOMContentLoaded', () => {
+      window.loadScene(window.Scene1);
+    });
+  </script>
+</body>
+</html>

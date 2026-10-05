@@ -1,0 +1,147 @@
+/* Vintage Thermal Café Receipt Styling */
+.receipt-wrapper {
+  position: relative;
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  animation: receiptSlide 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes receiptSlide {
+  0% { opacity: 0; transform: translateY(40px) scale(0.92); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.receipt-paper {
+  background: #fbf7ee;
+  color: #281d16;
+  width: 90vw;
+  max-width: 340px;
+  padding: 24px 20px 28px 20px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65),
+              0 0 1px rgba(0,0,0,0.3);
+  font-family: 'Space Mono', 'Courier New', Courier, monospace;
+  position: relative;
+  border-radius: 2px;
+}
+
+/* Serrated Zigzag Edges */
+.receipt-paper::before,
+.receipt-paper::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background-size: 16px 10px;
+}
+
+.receipt-paper::before {
+  top: -10px;
+  background-image: radial-gradient(circle at 8px -4px, transparent 8px, #fbf7ee 9px);
+}
+
+.receipt-paper::after {
+  bottom: -10px;
+  background-image: radial-gradient(circle at 8px 14px, transparent 8px, #fbf7ee 9px);
+}
+
+.receipt-header {
+  text-align: center;
+  border-bottom: 1.5px dashed #4a382c;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+.receipt-logo {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #1a0f0a;
+}
+
+.receipt-sub {
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #735d4f;
+  margin-top: 2px;
+}
+
+.receipt-info-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #594539;
+  margin-bottom: 4px;
+}
+
+.receipt-divider {
+  border-top: 1px dashed #735d4f;
+  margin: 10px 0;
+}
+
+.receipt-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.78rem;
+}
+
+.receipt-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.receipt-item-name {
+  max-width: 70%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.receipt-item-price {
+  font-weight: 600;
+}
+
+.receipt-special-row {
+  color: #b54728;
+  font-style: italic;
+}
+
+.receipt-total-box {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1.5px dashed #4a382c;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: #1a0f0a;
+}
+
+.receipt-stamp {
+  margin-top: 14px;
+  border: 2px solid #b54728;
+  color: #b54728;
+  border-radius: 6px;
+  padding: 6px;
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transform: rotate(-3deg);
+  opacity: 0.85;
+}
+
+.receipt-footer-note {
+  text-align: center;
+  font-size: 0.65rem;
+  color: #8c7362;
+  margin-top: 10px;
+  letter-spacing: 0.5px;
+}
